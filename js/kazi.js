@@ -143,7 +143,7 @@ legend_drainage.onAdd = function (map) {
     var div = L.DomUtil.create('div', 'info legend'),
         grades = ["ditch", "drain","stream","underground_drain"],
         labels = [];
-    div.innerHTML += '<b></b><br><img src="./images/legends.png">' 
+    div.innerHTML += '<b></b><br><img src="./images/legend.PNG">' 
 	
     return div;
 };

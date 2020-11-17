@@ -61,7 +61,7 @@ var styleFloodpronearea = {
 	}
 	
 var bufferStyle = {
-    "color":"#ff0505",
+    "color":"#e66363",
     "weight": 4,
     "opacity": 5,
     "fillColor": "#e66363",
@@ -94,15 +94,15 @@ var bufferStyle = {
 	
 // data layers
 var shehias = L.geoJson(shehias,{style:style_shehia}).addTo(map); //shehias
-var buildings = L.geoJson(building,{style:style_buildings}).addTo(map); //buildings
+var buildings = L.geoJson(building,{style:style_buildings}).addTo(map).bindPopup("Buildings");; //buildings
 
 //threats
-var drainages = L.geoJson(drainage,{style:drainageStyle}) //drainage
+var drainages = L.geoJson(drainage,{style:drainageStyle}).bindPopup("Drainage"); //drainage
 //var wastepoints = L.geoJson(wastepoints,{style:style_wastepoints}) //wastepoints
-var waterbodies = L.geoJson(waterbodies,{style:styleWater}) //waterbodies
+var waterbodies = L.geoJson(waterbodies,{style:styleWater}).bindPopup("Water Body"); //waterbodies
 var wastepoints = L.geoJson(wastepoints, {
     pointToLayer: function (feature, latlng) {
-        return L.circleMarker(latlng, style_wastepoints);
+        return L.circleMarker(latlng, style_wastepoints).bindPopup("Dump Site.");
     },
     //onEachFeature:onEachShop
 });
@@ -110,11 +110,11 @@ var wastepoints = L.geoJson(wastepoints, {
 
 
 //impact
-var floodpronearea = L.geoJson(floodpronearea,{style:styleFloodpronearea}); //floodpronearea
-var floodedbuffer = L.geoJson(floodbuffer,{style:bufferStyle}); //floodpronebuffer
+var floodpronearea = L.geoJson(floodpronearea,{style:styleFloodpronearea}).bindPopup("Flooded Area."); //floodpronearea
+var floodedbuffer = L.geoJson(floodbuffer,{style:bufferStyle}).bindPopup("Flooded Area"); //floodpronebuffer
 
 //blockage material
-var blocked = L.geoJson(drainage,{style:blockStyle}) //drainage
+var blocked = L.geoJson(drainage,{style:blockStyle}).bindPopup("Blockage Materials"); //drainage
 
 
 //groups

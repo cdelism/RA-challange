@@ -1,6 +1,10 @@
 var map = new L.map('map').setView([-6.164653, 39.208925], 14 );
 
 var osmlayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+var said = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+    maxZoom: 20,
+    subdomains:['mt0','mt1','mt2','mt3']
+}).addTo(map);
 
 
 
@@ -130,7 +134,9 @@ var blockages= L.layerGroup([blocked]).addTo(map);
 			 "Blockage material":blockages
 			}; 
  var basemaps = {
+    "Setalite View":said,
              "OpenStreetMap":osmlayer
+            
          };
 
 L.control.layers(overlays,basemaps,{position:'topright'}).addTo(map);

@@ -12,11 +12,11 @@ var said = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
  //layer style
  var style_shehia = {
      "color":"#fcfcfc",
-     "weight": 0.5,
-     "opacity": 0.5,
+     "weight": 0.2,
+     "opacity": 1,
      "dashArray": '5,5',
     "fillColor": "#f5fcfc",
-     "fillOpacity": 1
+     "fillOpacity": "1" ,
 };
  var style_buildings = {
      "color":"#cccfcf",

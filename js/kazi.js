@@ -1,10 +1,6 @@
 var map = new L.map('map').setView([-6.164653, 39.208925], 14 );
 
 var osmlayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-var said = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
-    maxZoom: 20,
-    subdomains:['mt0','mt1','mt2','mt3']
-}).addTo(map);
 
 
 
@@ -12,11 +8,11 @@ var said = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
  //layer style
  var style_shehia = {
      "color":"#fcfcfc",
-     "weight": 0.2,
-     "opacity": 1,
+     "weight": 0.5,
+     "opacity": 0.5,
      "dashArray": '5,5',
     "fillColor": "#f5fcfc",
-     "fillOpacity": "1" ,
+     "fillOpacity": 1
 };
  var style_buildings = {
      "color":"#cccfcf",
@@ -65,7 +61,7 @@ var styleFloodpronearea = {
 	}
 	
 var bufferStyle = {
-    "color":"#e66363",
+    "color":"#ff0505",
     "weight": 4,
     "opacity": 5,
     "fillColor": "#e66363",
@@ -95,7 +91,6 @@ var bufferStyle = {
      };
 	}
 
-	
 // data layers
 var shehias = L.geoJson(shehias,{style:style_shehia}).addTo(map); //shehias
 var buildings = L.geoJson(building,{style:style_buildings}).addTo(map).bindPopup("Buildings");; //buildings
@@ -128,47 +123,85 @@ var blockages= L.layerGroup([blocked]).addTo(map);
 
 
 //layer control
- var overlays = {
-             "Threat toward Drainage blockage":threats,
-			 "Flooding Impact of Drainage Blockage ":impact,
-			 "Blockage material":blockages
-			}; 
- var basemaps = {
-    "Setalite View":said,
-             "OpenStreetMap":osmlayer
-            
-         };
+var overlays = {
+    "Threat toward Drainage blockage":threats,
+    "Flooding Impact of Drainage Blockage":impact,
+    "Blockage material":blockages
+    }; 
+var basemaps = {
+        "OpenStreetMap":osmlayer
+    };
 
 L.control.layers(overlays,basemaps,{position:'topright'}).addTo(map);
 
 
-//legends
-var legend_drainage = L.control({position: 'bottomleft'});
 
-legend_drainage.onAdd = function (map) {
+
+
+//legends
+var main_legend = L.control({position: 'bottomleft'});
+
+main_legend.onAdd = function (map) {
     var div = L.DomUtil.create('div', 'info legend'),
         grades = ["ditch", "drain","stream","underground_drain"],
         labels = [];
-    div.innerHTML += '<b></b><br><img src="./images/legend.png">' 
+    div.innerHTML += '<b></b><br><img src="./images/drainage.png">' 
 	
     return div;
 };
-map.addControl(legend_drainage);
+map.addControl(main_legend);
+
+var threats_legend = L.control({position: 'bottomleft'});
+var impact_legend = L.control({position: 'bottomleft'});
+var blockage_legend = L.control({position: 'bottomleft'});
 
 
-var legend_drainage1 = L.control({position: 'bottomright'});
-
-legend_drainage1.onAdd = function (map) {
-    var div = L.DomUtil.create('div', 'info legend'),
-        grades = ["ditch", "drain","stream","underground_drain"],
-        labels = [];
-    div.innerHTML += '<b></b><br><img src="./images/materials.png">' 
-    return div;
+threats_legend.onAdd = function (map) {
+var div = L.DomUtil.create('div', 'info legend');
+div.innerHTML +=
+'<img src="./two.jpeg" alt="legend" width="134" height="147">';
+return div;
 };
-map.addControl(legend_drainage);
 
+// threats_legend.addTo(map);
 
+impact_legend.onAdd = function (map) {
+var div = L.DomUtil.create('div', 'info legend');
+    div.innerHTML +=
+    '<img src="./one.jpeg" alt="legend" width="134" height="147">';
+return div;
+};
 
+// impact_legend.addTo(map);
 
+blockage_legend.onAdd = function (map) {
+    var div = L.DomUtil.create('div', 'info legend');
+        div.innerHTML +=
+        '<img src="./three.jpeg" alt="legend" width="134" height="147">';
+    return div;
+    };
+    // blockage_legend.addTo(map); 
 
+map.on('baselayerchange', function (eventLayer) {
+    // Switch to the Population legend...
+    if (eventLayer.name === 'Threat toward Drainage blockage') {
+        this.removeControl(impact_legend);
+        this.removeControl(blockage_legend);
+        this.removeControl(main_legend);
+        threats_legend.addTo(this);
+    } 
+
+    else if(eventLayer.name === 'Blockage material') { 
+        this.removeControl(impact_legend);
+        this.removeControl(threats_legend);
+        this.removeControl(main_legend);
+        blockage_legend.addTo(this);
+    }
+    else if(eventLayer.name === 'Flooding Impact of Drainage Blockage'){ 
+        this.removeControl(threats_legend);
+        this.removeControl(blockage_legend);
+        this.removeControl(main_legend);
+        impact_legend.addTo(this);
+    }
+});
 
